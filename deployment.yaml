@@ -54,15 +54,21 @@ spec:
         - name: nginx-config-volume
           mountPath: /etc/nginx/nginx.conf
           subPath: nginx.conf
-        - name: nginx-auth-secret-volume
-          mountPath: /etc/nginx/auth
+        env:
+        - name: NGINX_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: nginx-auth-secret-volume
+              key: username
+        - name: NGINX_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: nginx-auth-secret-volume
+              key: password
       volumes:
       - name: nginx-config-volume
         configMap:
           name: nginx-config
-      - name: nginx-auth-secret-volume
-        secret:
-          secretName: nginx-auth-secret
 ---
 apiVersion: v1
 kind: Service
